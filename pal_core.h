@@ -55,7 +55,7 @@ extern "C" {
 
 /* do bloom emulation (side effect: makes screen have black borders) */
 #define PAL_DO_BLOOM    0  /* does not work for NES */
-#define PAL_DO_VSYNC    1  /* look for VSYNC */
+#define PAL_DO_VSYNC    0  /* look for VSYNC */
 #define PAL_DO_HSYNC    1  /* look for HSYNC */
 
 struct PAL_CRT {

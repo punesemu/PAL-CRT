@@ -32,8 +32,8 @@ extern "C" {
 #define PAL_VRES        312                       /* vertical resolution */
 #define PAL_INPUT_SIZE  (PAL_HRES * PAL_VRES)
 
-#define PAL_TOP         22     /* first line with active video */
-#define PAL_BOT         311    /* final line with active video */
+#define PAL_TOP         42     /* first line with active video */
+#define PAL_BOT         282    /* final line with active video */
 #define PAL_LINES       (PAL_BOT - PAL_TOP) /* number of active video lines */
 
 /*
