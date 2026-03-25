@@ -42,7 +42,7 @@ sintabil8(int n)
 
 /* 14-bit interpolated sine/cosine */
 extern void
-pal_sincos14(int *s, int *c, int n)
+PALCRT_SYM(pal_sincos14)(int *s, int *c, int n)
 {
     int h;
 
@@ -63,7 +63,7 @@ pal_sincos14(int *s, int *c, int n)
 }
 
 extern int
-pal_bpp4fmt(int format)
+PALCRT_SYM(pal_bpp4fmt)(int format)
 {
     switch (format) {
         case PAL_PIX_FORMAT_RGB:
@@ -177,13 +177,13 @@ init_eq(struct EQF *f,
     f->g[1] = g_mid;
     f->g[2] = g_hi;
 
-    pal_sincos14(&sn, &cs, T14_PI * f_lo / rate);
+    PALCRT_SYM(pal_sincos14)(&sn, &cs, T14_PI * f_lo / rate);
 #if (EQ_P >= 15)
     f->lf = 2 * (sn << (EQ_P - 15));
 #else
     f->lf = 2 * (sn >> (15 - EQ_P));
 #endif
-    pal_sincos14(&sn, &cs, T14_PI * f_hi / rate);
+    PALCRT_SYM(pal_sincos14)(&sn, &cs, T14_PI * f_hi / rate);
 #if (EQ_P >= 15)
     f->hf = 2 * (sn << (EQ_P - 15));
 #else
@@ -235,7 +235,7 @@ eqf(struct EQF *f, int s)
 /*****************************************************************************/
 
 extern void
-pal_resize(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
+PALCRT_SYM(pal_resize)(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
 {
     v->outw = w;
     v->outh = h;
@@ -244,7 +244,7 @@ pal_resize(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
 }
 
 extern void
-pal_reset(struct PAL_CRT *v)
+PALCRT_SYM(pal_reset)(struct PAL_CRT *v)
 {
     v->saturation = 10;
     v->brightness = 0;
@@ -256,11 +256,11 @@ pal_reset(struct PAL_CRT *v)
 }
 
 extern void
-pal_init(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
+PALCRT_SYM(pal_init)(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
 {
     memset(v, 0, sizeof(struct PAL_CRT));
-    pal_resize(v, w, h, f, out);
-    pal_reset(v);
+    PALCRT_SYM(pal_resize)(v, w, h, f, out);
+    PALCRT_SYM(pal_reset)(v);
     v->rn = 194;
 
     /* kilohertz to line sample conversion */
@@ -279,7 +279,7 @@ pal_init(struct PAL_CRT *v, int w, int h, int f, unsigned char *out)
 #define VSYNC_WINDOW 6
 
 extern void
-pal_demodulate(struct PAL_CRT *c, int noise)
+PALCRT_SYM(pal_demodulate)(struct PAL_CRT *c, int noise)
 {
     struct {
         int y, u, v;
@@ -298,7 +298,7 @@ pal_demodulate(struct PAL_CRT *c, int noise)
     int max_e; /* approx maximum energy in a scan line */
 #endif
 
-    bpp = pal_bpp4fmt(c->out_format);
+    bpp = PALCRT_SYM(pal_bpp4fmt)(c->out_format);
     if (bpp == 0) {
         return;
     }
@@ -445,7 +445,7 @@ vsync_found:
         }
         odd = odd ? -1 : 1;
 
-        pal_sincos14(&huesn, &huecs, 90 * 8192 / 180 - OFFSET_25Hz(line));
+        PALCRT_SYM(pal_sincos14)(&huesn, &huecs, 90 * 8192 / 180 - OFFSET_25Hz(line));
         huesn >>= 7; /* make 8-bit */
         huecs >>= 7;
 

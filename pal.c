@@ -120,7 +120,7 @@ iirf(struct IIRLP *f, int s)
 }
 
 extern void
-pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
+PALCRT_SYM(pal_modulate)(struct PAL_CRT *v, struct PAL_SETTINGS *s)
 {
     int x, y, xo, yo;
     int destw = AV_LEN;
@@ -188,7 +188,7 @@ pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
         memset(ccsin, 0, sizeof(ccsin));
     }
 
-    bpp = pal_bpp4fmt(s->format);
+    bpp = PALCRT_SYM(pal_bpp4fmt)(s->format);
     if (bpp == 0) {
         return; /* just to be safe */
     }
@@ -238,7 +238,7 @@ pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
                 while (t < PAL_HRES) line[t++] = BLANK_LEVEL;
             }
             for (t = CB_BEG; t < CB_BEG + (CB_CYCLES * PAL_CB_FREQ); t++) {
-                pal_sincos14(&sn, &cs, ccburst[n & 3][t & 3] - OFFSET_25Hz(n));
+                PALCRT_SYM(pal_sincos14)(&sn, &cs, ccburst[n & 3][t & 3] - OFFSET_25Hz(n));
                 line[t] = (BLANK_LEVEL + ((sn >> 10) * BURST_LEVEL)) >> 5;
                 iccf[(n + 3) % PAL_VRES][t & 3] = line[t];
             }
@@ -307,7 +307,7 @@ pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
             voff = ((y + yo) & 3);
             fy = iirf(&iirY, fy);
             if (s->as_color) {
-                pal_sincos14(&sn, &cs, ccsin[voff][(x + xo) & 3] - o25Hz);
+                PALCRT_SYM(pal_sincos14)(&sn, &cs, ccsin[voff][(x + xo) & 3] - o25Hz);
                 fu = 32244 * ((bA << 2) - fy) >> 16;
                 fv = 57475 * ((rA << 2) - fy) >> 16;
                 fu = iirf(&iirU, fu) * sn >> 14;

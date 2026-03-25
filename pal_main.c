@@ -228,7 +228,7 @@ main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    pal_init(&crt, outw, outh, PAL_PIX_FORMAT_BGRA, output);
+    PALCRT_SYM(pal_init)(&crt, outw, outh, PAL_PIX_FORMAT_BGRA, output);
 
     memset(&pal, 0, sizeof(struct PAL_SETTINGS));
     pal.data = img;
@@ -251,12 +251,12 @@ main(int argc, char **argv)
    
     /* accumulate 8 frames */
     while (err < 8) {
-        pal_modulate(&crt, &pal);
-        pal_demodulate(&crt, noise);
+        PALCRT_SYM(pal_modulate)(&crt, &pal);
+        PALCRT_SYM(pal_demodulate)(&crt, noise);
         if (!progressive) {
             pal.field++;
-            pal_modulate(&crt, &pal);
-            pal_demodulate(&crt, noise);
+            PALCRT_SYM(pal_modulate)(&crt, &pal);
+            PALCRT_SYM(pal_demodulate)(&crt, noise);
         }
         err++;
     }
@@ -409,7 +409,7 @@ updatecb(void)
         printf("fadephos: %d\n", fadephos);
     }
     if (pkb_key_pressed('r')) {
-        pal_reset(&crt);
+        PALCRT_SYM(pal_reset)(&crt);
     }
     if (pkb_key_pressed('g')) {
         crt.scanlines ^= 1;
@@ -493,8 +493,8 @@ displaycb(void)
     pal.raw = raw;
     pal.hue = hue;
 #endif
-    pal_modulate(&crt, &pal);
-    pal_demodulate(&crt, noise);
+    PALCRT_SYM(pal_modulate)(&crt, &pal);
+    PALCRT_SYM(pal_demodulate)(&crt, noise);
     if (!progressive) {
         field++;
     }
@@ -530,7 +530,7 @@ main(int argc, char **argv)
     
     printf(DRV_HEADER);
 
-    pal_init(&crt, info->width, info->height, PAL_PIX_FORMAT_BGRA, video);
+    PALCRT_SYM(pal_init)(&crt, info->width, info->height, PAL_PIX_FORMAT_BGRA, video);
     crt.blend = 1;
     crt.scanlines = 1;
 

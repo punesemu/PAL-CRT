@@ -67,7 +67,7 @@ setup_field(struct PAL_CRT *v, struct PAL_SETTINGS *s)
 }
  
 extern void
-pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
+PALCRT_SYM(pal_modulate)(struct PAL_CRT *v, struct PAL_SETTINGS *s)
 {
     int x, y, xo, yo;
     int destw = AV_LEN;
@@ -90,13 +90,13 @@ pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
             n = vert + x * 90 + 120;
             ang = n + (s->altline[y] * 45) + (s->altline[y] * s->hue);
             /* swinging burst */
-            pal_sincos14(&sn, &cs, ang * 8192 / 180);
+            PALCRT_SYM(pal_sincos14)(&sn, &cs, ang * 8192 / 180);
             ccburst[y][x] = sn;
             ccsin[y][x] = (n - (180 - 15)) * 8192 / 180;
         }
     }
 
-    bpp = pal_bpp4fmt(s->format);
+    bpp = PALCRT_SYM(pal_bpp4fmt)(s->format);
     if (bpp == 0) {
         return; /* just to be safe */
     }
@@ -164,7 +164,7 @@ pal_modulate(struct PAL_CRT *v, struct PAL_SETTINGS *s)
             fy = (19595 * rA + 38470 * gA +  7471 * bA) >> 14;
             ire = BLACK_LEVEL + v->black_point;
 
-            pal_sincos14(&sn, &cs, ccsin[nm6][(x + xo) & 3]);
+            PALCRT_SYM(pal_sincos14)(&sn, &cs, ccsin[nm6][(x + xo) & 3]);
             fu = 32244 * ((bA << 2) - fy) >> 16;
             fv = 57475 * ((rA << 2) - fy) >> 16;
             fu = fu * sn >> 14;
